@@ -46,9 +46,6 @@ export default function ChooseVote() {
 
     const {
         runContractFunction: voting,
-        data: enterTxResponse,
-        isLoading,
-        isFetching,
     } = useWeb3Contract({
         abi: [
             {

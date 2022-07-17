@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Header from "../components/Header";
-import AddVoter from "../components/AddVoter";
 import GetVoter from "../components/GetVoter";
 import WorkflowStatus from "../components/WorkflowStatus";
-import Body from "../components/Body";
+import {useMoralis} from "react-moralis";
 
 export default function Home() {
-  return (
+
+    return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
@@ -16,8 +16,7 @@ export default function Home() {
       </Head>
 
         <Header />
-        <GetVoter />
-        <WorkflowStatus/>
+
     </div>
   )
 }

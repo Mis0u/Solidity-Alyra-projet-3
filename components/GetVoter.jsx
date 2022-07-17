@@ -31,49 +31,46 @@ export default function GetVoter() {
 
     const {
         runContractFunction: voting,
-        data: enterTxResponse,
-        isLoading,
-        isFetching,
     } = useWeb3Contract({
-            abi: [
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "_addr",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "getVoter",
-                    "outputs": [
-                        {
-                            "components": [
-                                {
-                                    "internalType": "bool",
-                                    "name": "isRegistered",
-                                    "type": "bool"
-                                },
-                                {
-                                    "internalType": "bool",
-                                    "name": "hasVoted",
-                                    "type": "bool"
-                                },
-                                {
-                                    "internalType": "uint256",
-                                    "name": "votedProposalId",
-                                    "type": "uint256"
-                                }
-                            ],
-                            "internalType": "struct Voting.Voter",
-                            "name": "",
-                            "type": "tuple"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function",
-                    "constant": true
-                },
-            ],
+        abi: [
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_addr",
+                        "type": "address"
+                    }
+                ],
+                "name": "getVoter",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "bool",
+                                "name": "isRegistered",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "hasVoted",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "votedProposalId",
+                                "type": "uint256"
+                            }
+                        ],
+                        "internalType": "struct Voting.Voter",
+                        "name": "",
+                        "type": "tuple"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function",
+                "constant": true
+            },
+        ],
         contractAddress: contractAddress,
         functionName: "getVoter",
         params: {

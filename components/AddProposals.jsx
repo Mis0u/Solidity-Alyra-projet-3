@@ -6,6 +6,7 @@ import {contractAddress} from "./utils/ContractAddress";
 
 export default function AddProposals() {
     const [proposal, setProposal] = useState('')
+    const [proposalId, setProposalId] = useState('')
 
     const dispatch = useNotification();
 
@@ -45,26 +46,20 @@ export default function AddProposals() {
     };
 
     const {
-        runContractFunction: voting,
-        data: enterTxResponse,
-        isLoading,
-        isFetching,
+        runContractFunction: proposalChoosen,
     } = useWeb3Contract({
-        abi: [
-            {
-                "inputs": [
-                    {
-                        "internalType": "string",
-                        "name": "_desc",
-                        "type": "string"
-                    }
-                ],
-                "name": "addProposal",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-        ],
+        abi: abi,
+        contractAddress: contractAddress,
+        functionName: "addProposal",
+        params: {
+            _desc: proposal,
+        }
+    })
+
+    const {
+        runContractFunction: proposalInfoId,
+    } = useWeb3Contract({
+        abi: abi,
         contractAddress: contractAddress,
         functionName: "addProposal",
         params: {
@@ -91,7 +86,7 @@ export default function AddProposals() {
                     type='button'
                     icon='triangleUp'
                     onClick={async () =>
-                        await voting({
+                        await proposalChoosen({
                             onSuccess: (msg) => {
                                 handleSuccess(msg, 'Votre proposition a bien été  soumise', 'Information', 'check')
                             },

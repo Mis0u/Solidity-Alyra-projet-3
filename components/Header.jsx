@@ -3,53 +3,22 @@ import {useEffect, useState} from "react";
 import AddVoter from "./AddVoter";
 import GetVoter from "./GetVoter";
 import WorkflowStatus from "./WorkflowStatus";
+import {ConnectButton} from "web3uikit";
 
 export default function Header() {
     const { enableWeb3, account, isWeb3EnableLoading, isWeb3Enabled, Moralis } = useMoralis();
-
-    useEffect(() => {
-        if (isWeb3Enabled) return;
-        if (typeof window != 'undefined') {
-            if (window.localStorage.getItem('status')) {
-                enableWeb3();
-            }
-        }
-    },[isWeb3Enabled])
-
-    useEffect(() => {
-        Moralis.onAccountChanged(account => {
-            if (null === account) {
-                window.localStorage.removeItem('status');
-                deactivateWeb3();
-            }
-        }, [])
-    })
+    const owner="0x3e7729aBcE92aA0d91C7aF994ebb2461d2ea2dF2";
 
     return (
         <div>
+            <ConnectButton />
             { account  ? (
                 <div>
-                    <p title={account}>
-                        {`${account.slice(0,8)}...${account.slice(account.length - 4)}`}
-                    </p>
                     <AddVoter/>
-
                     <GetVoter />
-                    <WorkflowStatus/>
+                    <WorkflowStatus account={account} owner={owner}/>
                 </div>
-            ) : (
-                <div>
-                    <button
-                        onClick={async () => {
-                            await enableWeb3();
-                            window.localStorage.setItem('status', 'connected');
-                        }}
-                        disabled={isWeb3EnableLoading}
-                    >
-                        Connect
-                    </button>
-                </div>
-            ) }
+            ) : ('') }
         </div>
     )
 }

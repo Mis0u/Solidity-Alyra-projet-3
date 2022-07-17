@@ -5,7 +5,7 @@ import Proposals from "./AddProposals";
 import ChooseVote from "./ChooseVote";
 import {contractAddress} from "./utils/ContractAddress";
 
-export default function WorkflowStatus() {
+export default function WorkflowStatus({account, owner}) {
 
     const [workflowStatus, setWorkflowStatus] = useState('');
     const [messageWorkflow, setMessageWorkflow] = useState('');
@@ -57,8 +57,8 @@ export default function WorkflowStatus() {
     }
 
     const handleSuccess = async function (tx, type, message, title, icon) {
-           await tx;
-           handleNotification(tx, type, message, title, icon)
+        await tx;
+        handleNotification(tx, type, message, title, icon)
     }
 
     const handleNotification = function (tx, type, message, title, icon) {
@@ -250,141 +250,147 @@ export default function WorkflowStatus() {
         },
     })
 
+    console.log('cacao', account.toLocaleLowerCase() ,owner.toLocaleLowerCase())
+
     const resetWinningProposalId = () => {
         setWinningProposalId('')
     }
 
     return (
         <div>
-            {'0' === workflowStatus.toString() ? (
-                <Button
-                    text='Commencer les propositions'
-                    theme='primary'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await proposalRegistering({
-                            onSuccess: (val) => {
-                                setWorkflowStatus('1')
-                                handleMessageWorkflow();
-                                console.log('valerie',val)
-                            },
-                            onError: (err) => {
-                                console.log(err)
+            {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
+                <div>
+                    {'0' === workflowStatus.toString() ? (
+                        <Button
+                            text='Commencer les propositions'
+                            theme='primary'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await proposalRegistering({
+                                    onSuccess: (val) => {
+                                        setWorkflowStatus('1')
+                                        handleMessageWorkflow();
+                                        console.log('valerie',val)
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ): ('')}
-            {'1' === workflowStatus.toString() ? (
-                <Button
-                    text='Arrêter les propositions'
-                    theme='colored'
-                    color='red'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await proposalRegisteringStop({
-                            onSuccess: (val) => {
-                                setWorkflowStatus('2')
-                                handleMessageWorkflow();
-                                console.log(val)
-                            },
-                            onError: (err) => {
-                                console.log(err)
+                        />
+                    ): ('')}
+                    {'1' === workflowStatus.toString() ? (
+                        <Button
+                            text='Arrêter les propositions'
+                            theme='colored'
+                            color='red'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await proposalRegisteringStop({
+                                    onSuccess: (val) => {
+                                        setWorkflowStatus('2')
+                                        handleMessageWorkflow();
+                                        console.log(val)
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ): ('')}
-            {'2' === workflowStatus.toString() ? (
-                <Button
-                    text='Commencer les votes'
-                    theme='primary'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await voteRegistering({
-                            onSuccess: (val) => {
-                                setWorkflowStatus('3')
-                                handleMessageWorkflow();
-                                console.log(val)
-                            },
-                            onError: (err) => {
-                                console.log(err)
+                        />
+                    ): ('')}
+                    {'2' === workflowStatus.toString() ? (
+                        <Button
+                            text='Commencer les votes'
+                            theme='primary'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await voteRegistering({
+                                    onSuccess: (val) => {
+                                        setWorkflowStatus('3')
+                                        handleMessageWorkflow();
+                                        console.log(val)
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ): ('')}
-            {'3' === workflowStatus.toString() ? (
-                <Button
-                    text='Terminer les votes'
-                    theme='colored'
-                    color='red'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await voteEnding({
-                            onSuccess: (val) => {
-                                setWorkflowStatus('4')
-                                handleMessageWorkflow();
-                                console.log(val)
-                            },
-                            onError: (err) => {
-                                console.log(err)
+                        />
+                    ): ('')}
+                    {'3' === workflowStatus.toString() ? (
+                        <Button
+                            text='Terminer les votes'
+                            theme='colored'
+                            color='red'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await voteEnding({
+                                    onSuccess: (val) => {
+                                        setWorkflowStatus('4')
+                                        handleMessageWorkflow();
+                                        console.log(val)
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-                ): ('')}
+                        />
+                    ): ('')}
 
-            {'4' === workflowStatus.toString() ? (
-                <Button
-                    text='Comptage des votes'
-                    theme='primary'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await voteTallied({
-                            onSuccess: (val) => {
-                                setWorkflowStatus('5')
-                                handleMessageWorkflow();
-                                console.log(val)
-                            },
-                            onError: (err) => {
-                                console.log(err)
+                    {'4' === workflowStatus.toString() ? (
+                        <Button
+                            text='Comptage des votes'
+                            theme='primary'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await voteTallied({
+                                    onSuccess: (val) => {
+                                        setWorkflowStatus('5')
+                                        handleMessageWorkflow();
+                                        console.log(val)
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ): ('')}
-            {'5' === workflowStatus.toString() ? (
-                <Button
-                    text='Dévoiler la proposition gagnante'
-                    theme='primary'
-                    type='button'
-                    icon='roadmap'
-                    disabled={isLoading || isFetching}
-                    onClick={async () =>
-                        await winingProposal({
-                            onSuccess: (val) => {
-                                handleMessageWorkflow();
-                                setWinningProposalId(parseInt(val));
-                                console.log('wpid',val, winningProposalId,'parse', parseInt(val))
-                            },
-                            onError: (err) => {
-                                console.log(err)
+                        />
+                    ): ('')}
+                    {'5' === workflowStatus.toString() ? (
+                        <Button
+                            text='Dévoiler la proposition gagnante'
+                            theme='primary'
+                            type='button'
+                            icon='roadmap'
+                            disabled={isLoading || isFetching}
+                            onClick={async () =>
+                                await winingProposal({
+                                    onSuccess: (val) => {
+                                        handleMessageWorkflow();
+                                        setWinningProposalId(parseInt(val));
+                                        console.log('wpid',val, winningProposalId,'parse', parseInt(val))
+                                    },
+                                    onError: (err) => {
+                                        console.log(err)
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ): ('')}
+                        />
+                    ): ('')}
+                </div>
+            ) : ('')}
             {'1' === workflowStatus.toString() ? (
                 <Proposals/>
             ) : ('')}
@@ -442,9 +448,7 @@ export default function WorkflowStatus() {
                         }
                     })
                 }
-            >
-                Change status
-            </Button>
+            />
         </div>
     );
 }

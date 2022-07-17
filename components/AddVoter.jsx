@@ -3,8 +3,6 @@ import { Button, Input, Table, useNotification} from 'web3uikit';
 import {useEffect, useState} from "react";
 import {contractAddress} from "./utils/ContractAddress";
 
-//import { handleSuccess, handleError } from "./utils/NotificationWeb3";
-
 export default function AddVoter() {
     const [address, setAddress] = useState('');
     const [arrayAddress, setArrayAddress] = useState([]);
@@ -46,8 +44,7 @@ export default function AddVoter() {
     }
 
     useEffect(() => {
-            console.log('value', address)
-           setArrayAddress(arrayAddress)
+        setArrayAddress(arrayAddress)
     },[arrayAddress])
 
     const {
@@ -82,21 +79,20 @@ export default function AddVoter() {
         setAddress(event.target.value);
     };
 
-    console.log('icaccount',owner, account)
 
     return (
         <div>
 
             {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
-                    <Input
-                        id='addVoter'
-                        onChange={handleChange}
-                        iconPosition="front"
-                        label="Insérez une adresse"
-                        name="Test text Input"
-                        prefixIcon="eth"
-                        type="text"
-                    />
+                <Input
+                    id='addVoter'
+                    onChange={handleChange}
+                    iconPosition="front"
+                    label="Insérez une adresse"
+                    name="Test text Input"
+                    prefixIcon="eth"
+                    type="text"
+                />
             ): ('')}
             { account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
                 <Button
@@ -104,14 +100,11 @@ export default function AddVoter() {
                     theme='primary'
                     type='button'
                     icon='arrowCircleDown'
-                    disabled={isWeb3EnableLoading}
                     onClick={async () =>
                         await voting({
                             onSuccess: (mess) => {
                                 setArrayAddress((prevArray) =>[...prevArray, address])
                                 handleSuccess(mess, 'info', `L\'adresse ${address} a bien été ajouté`, 'Ajout d\'une nouvelle adresse', 'bell')
-                                console.log(mess)
-                                console.log('array',arrayAddress)
                             },
                             onError: (err) => {
                                 handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
@@ -123,11 +116,11 @@ export default function AddVoter() {
             <Table
                 columnsConfig="80px 3fr 2fr 2fr 80px"
                 data={
-                        arrayAddress.map((value) => (
-                           [
-                               value
-                           ]
-                        ))
+                    arrayAddress.map((value) => (
+                        [
+                            value
+                        ]
+                    ))
 
                 }
                 header={['Adresse Enregistrée']}
