@@ -1,34 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Avant de commencer
 
-## Getting Started
+Afin que la Dapp fonctionne correctement, il vous faut au préalable : 
 
-First, run the development server:
+* Un compte [Infura](https://infura.io/)
+* Un compte [Moralis](https://moralis.io/)
+* Un compte **Metamask** sous le réseau Ropsten
+* Node.js installé sur votre machine
+* [Truffle](https://trufflesuite.com/)
+
+## Installation
+
+Pour commencer, faites un `git clone` du projet dans le répertoire que vous désirez
+Puis munissez-vous de :
+* L'id de votre compte Infura
+* De votre [mnemonic](https://metamask.zendesk.com/hc/en-us/articles/4404722782107) Metamask
+* De votre adresse Metamask (par défaut ce sera l'account 1) 
+* De l'adresse du contrat que vous pouvez récupérer lors du déploiement du contrat
+* Du serveur et de l'id de votre compte Moralis
+
+Ensuite créé un fichier à la racine de votre projet nommé `.env`
+Puis renseignez-le comme ceci:
 
 ```bash
-npm run dev
-# or
-yarn dev
+INFURA_ID= "L'id de votre Infura (sans les '')"
+//Les lignes qui suivent devront être entre guillemet
+MNEMONIC="Votre mnémonic"
+NEXT_PUBLIC_OWNER="Votre adresse Metamask"
+NEXT_PUBLIC_CONTRACT_ADDRESS="L'adresse du contrat déployé (disponible une fois que vous aurez déployé votre contrat)"
+NEXT_PUBLIC_MORALIS_ID="L'id Moralis"
+NEXT_PUBLIC_MORALIS_SERVER="Le serveur Moralis"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Démarrage
+Faites un `truffle migrate --network ropsten` puis récupéré l'adresse du contrat et renseigné le dans le `.env`sous `NEXT_PUBLIC_CONTRACT_ADDRESS`
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Ensuite entrer la commande `npm install` et lancer le serveur `npm run dev`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Navigation
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Vous pouvez à présent vous rendre sur l'adresse de votre localhost et commencer à tester l'application
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Enjoy ! :partying_face:
