@@ -2,7 +2,6 @@ import {Button, Input, Modal, useNotification} from "web3uikit";
 import {useState} from "react";
 import {useWeb3Contract} from "react-moralis";
 import {contractAddress} from "./utils/ContractAddress";
-// import { handleSuccess, handleError } from "./utils/NotificationWeb3";
 
 export default function GetProposal() {
     const [proposalInfo, setProposalInfo] = useState(null)
@@ -10,24 +9,9 @@ export default function GetProposal() {
 
     const dispatch = useNotification();
 
-    const handleSuccess = async function (tx, message, title, icon) {
-        await tx;
-        handleNotificationSuccess(tx, message, title, icon)
-    }
-
     const handleError = async function (tx, message, title, icon) {
         await tx;
         handleNotificationError(tx, message, title, icon)
-    }
-
-    const handleNotificationSuccess = function (tx, message, title, icon) {
-        dispatch({
-            type:'info',
-            message: message,
-            title:title,
-            position:"topR",
-            icon:icon,
-        })
     }
 
     const handleNotificationError = function (tx, message, title, icon) {
@@ -95,8 +79,7 @@ export default function GetProposal() {
 
     return (
         <div>
-            <div className="get-proposal">
-                <h1>Découvrez une proposition</h1>
+            <div className="get-proposal flex justify-between items-center">
                 <Input
                     id='getProposal'
                     onChange={handleChange}
@@ -107,22 +90,23 @@ export default function GetProposal() {
                     type="text"
                 />
 
-                <Button
-                    text='Accéder à la proposition'
-                    theme='primary'
-                    type='button'
-                    icon='triangleUp'
-                    onClick={async () =>
-                        await proposalInfoId({
-                            onSuccess: (msg) => {
-                                setProposalInfo(msg)
-                            },
-                            onError: (err) => {
-                                handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
-                            }
-                        })
-                    }
-                />
+                    <Button
+                        text='Découvrez à la proposition'
+                        theme='primary'
+                        type='button'
+                        icon='arrowCircleLeft'
+                        size='large'
+                        onClick={async () =>
+                            await proposalInfoId({
+                                onSuccess: (msg) => {
+                                    setProposalInfo(msg)
+                                },
+                                onError: (err) => {
+                                    handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
+                                }
+                            })
+                        }
+                    />
 
                 <div>
                     {null !== proposalInfo ? (

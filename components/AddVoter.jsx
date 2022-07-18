@@ -78,7 +78,7 @@ export default function AddVoter() {
 
     return (
         <div>
-            <div className="flex flex-row justify-center m-2">
+            <div className="flex flex-row justify-between">
                 <div className="input-add-voter mr-2">
                     {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
                         <Input

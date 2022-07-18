@@ -1,5 +1,5 @@
-import { useWeb3ExecuteFunction, useWeb3Contract} from "react-moralis";
-import {useEffect, useState} from "react";
+import {useWeb3Contract} from "react-moralis";
+import {useState} from "react";
 import {Button, Input, Modal, useNotification} from "web3uikit";
 import {contractAddress} from "./utils/ContractAddress";
 
@@ -83,7 +83,7 @@ export default function GetVoter() {
     };
 
     return (
-        <div>
+        <div className="flex justify-between items-center">
             <Input
                 id='getVoter'
                 onChange={handleChange}
@@ -94,22 +94,25 @@ export default function GetVoter() {
                 type="text"
             />
 
-            <Button
-                text='Renseignement sur cette adresse'
-                theme='primary'
-                type='button'
-                icon='triangleUp'
-                onClick={async () =>
-                    await voting({
-                        onSuccess: (mess) => {
-                            setVoterInfo(mess)
-                        },
-                        onError: (err) => {
-                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
-                        }
-                    })
-                }
-            />
+            <div className="btn-get-address-info ml-3">
+                <Button
+                    text='Renseignement sur cette adresse'
+                    theme='primary'
+                    type='button'
+                    icon='arrowCircleLeft'
+                    size='large'
+                    onClick={async () =>
+                        await voting({
+                            onSuccess: (mess) => {
+                                setVoterInfo(mess)
+                            },
+                            onError: (err) => {
+                                handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
+                            }
+                        })
+                    }
+                />
+            </div>
             <div>
                 {null !== voterInfo ? (
                     <Modal

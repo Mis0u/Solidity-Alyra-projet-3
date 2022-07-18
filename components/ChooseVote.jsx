@@ -1,6 +1,6 @@
 import {Button, Input, useNotification} from "web3uikit";
 import {useWeb3Contract} from "react-moralis";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {contractAddress} from "./utils/ContractAddress";
 
 
@@ -71,9 +71,8 @@ export default function ChooseVote() {
 
     return (
         <div>
-            <div className="add-vote">
+            <div className='flex justify-between w-full'>
                 <Input
-                    id='getVoter'
                     onChange={handleChange}
                     iconPosition="front"
                     label="Insérez l'id de la proposition"
@@ -87,6 +86,7 @@ export default function ChooseVote() {
                     theme='primary'
                     type='button'
                     icon='triangleUp'
+                    size='large'
                     onClick={async () =>
                         await voting({
                             onSuccess: (msg) => {

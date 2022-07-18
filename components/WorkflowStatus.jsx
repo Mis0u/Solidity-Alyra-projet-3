@@ -1,7 +1,7 @@
 import { useWeb3Contract } from "react-moralis";
 import {useState, useEffect} from "react";
 import {useNotification, Button, Modal} from "web3uikit";
-import Proposals from "./AddProposals";
+import AddProposals from "./AddProposals";
 import ChooseVote from "./ChooseVote";
 import {contractAddress} from "./utils/ContractAddress";
 import GetProposal from "./GetProposal";
@@ -11,8 +11,6 @@ export default function WorkflowStatus({account, owner}) {
     const [workflowStatus, setWorkflowStatus] = useState('');
     const [messageWorkflow, setMessageWorkflow] = useState('');
     const [winningProposalId, setWinningProposalId] = useState('');
-
-    const dispatch = useNotification();
 
     useEffect( () => {
         async function onChangeMessageWorflow() {
@@ -54,18 +52,36 @@ export default function WorkflowStatus({account, owner}) {
         return messageWorkflow;
     }
 
-    const handleSuccess = async function (tx, type, message, title, icon) {
+    const dispatch = useNotification();
+
+    const handleSuccess = async function (tx, message, title, icon) {
         await tx;
-        handleNotification(tx, type, message, title, icon)
+        handleNotificationSuccess(tx, message, title, icon)
     }
 
-    const handleNotification = function (tx, type, message, title, icon) {
+    const handleError = async function (tx, message, title, icon) {
+        await tx;
+        handleNotificationError(tx, message, title, icon)
+    }
+
+    const handleNotificationSuccess = function (tx, message, title, icon) {
         dispatch({
-            type:type,
+            type:'info',
             message: message,
             title:title,
             position:"topR",
             icon:icon,
+        })
+    }
+
+    const handleNotificationError = function (tx, message, title, icon) {
+        dispatch({
+            type:'error',
+            message: message,
+            title:title,
+            position:"topR",
+            icon:icon,
+            iconColor:'red'
         })
     }
 
@@ -251,23 +267,39 @@ export default function WorkflowStatus({account, owner}) {
     }
 
     return (
-        <div>
-            <div className="flex flex-row justify-center">
+        <div className='flex flex-col justify-center items-center w-full'>
+            <div className={`mt-5 mb-5 flex flex-${'3' === workflowStatus.toString() ? 'col' : 'row'} justify-between w-full`}>
+                {'1' === workflowStatus.toString() ? (
+                    <AddProposals/>
+                ) : ('')}
+                {'3' === workflowStatus.toString() ? (
+                    <div className="mt-5 mb-5">
+                        <ChooseVote/>
+                    </div>
+                ) : ('')}
+                {'3' === workflowStatus.toString() ? (
+                    <GetProposal/>
+                ) : ('')}
+            </div>
+            <div className="flex flex-row justify-between w-full">
                 {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
-                    <div>
+                    <div className='button-workflow mr-3'>
                         {'0' === workflowStatus.toString() ? (
                             <Button
                                 text='Commencer les propositions'
                                 theme='primary'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await proposalRegistering({
                                         onSuccess: (val) => {
                                             setWorkflowStatus('1')
                                             handleMessageWorkflow();
+                                            handleSuccess(val, 'Les propositions vont débuter', `Changement de workflow`, 'bell')
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -281,14 +313,16 @@ export default function WorkflowStatus({account, owner}) {
                                 color='red'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await proposalRegisteringStop({
                                         onSuccess: (val) => {
                                             setWorkflowStatus('2')
                                             handleMessageWorkflow();
-                                            console.log(val)
+                                            handleSuccess(val, 'Les propositions vont s\'arrêter', `Changement de workflow`, 'bell')
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -301,13 +335,16 @@ export default function WorkflowStatus({account, owner}) {
                                 theme='primary'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await voteRegistering({
                                         onSuccess: (val) => {
                                             setWorkflowStatus('3')
                                             handleMessageWorkflow();
+                                            handleSuccess(val, 'Les votes vont commencer', `Changement de workflow`, 'bell')
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -321,13 +358,16 @@ export default function WorkflowStatus({account, owner}) {
                                 color='red'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await voteEnding({
                                         onSuccess: (val) => {
                                             setWorkflowStatus('4')
                                             handleMessageWorkflow();
+                                            handleSuccess(val, 'Les votes vont s\'arrêter', `Changement de workflow`, 'bell')
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -341,13 +381,16 @@ export default function WorkflowStatus({account, owner}) {
                                 theme='primary'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await voteTallied({
                                         onSuccess: (val) => {
                                             setWorkflowStatus('5')
                                             handleMessageWorkflow();
+                                            handleSuccess(val, 'Comptage des votes', `Changement de workflow`, 'bell')
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -360,6 +403,7 @@ export default function WorkflowStatus({account, owner}) {
                                 theme='primary'
                                 type='button'
                                 icon='roadmap'
+                                size='large'
                                 onClick={async () =>
                                     await winingProposal({
                                         onSuccess: (val) => {
@@ -367,6 +411,7 @@ export default function WorkflowStatus({account, owner}) {
                                             setWinningProposalId(parseInt(val));
                                         },
                                         onError: (err) => {
+                                            handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
                                             console.log(err)
                                         }
                                     })
@@ -381,12 +426,13 @@ export default function WorkflowStatus({account, owner}) {
                         theme='secondary'
                         type='button'
                         icon='info'
+                        size='large'
                         onClick={async () =>
                             await voting({
                                 onSuccess: (value) => {
                                     if (value !== workflowStatus) setWorkflowStatus(value)
                                     handleMessageWorkflow()
-                                    handleSuccess(value,'info', messageWorkflow, 'Status du Workflow', 'bell')
+                                    handleSuccess(value,messageWorkflow, 'Status du Workflow', 'bell')
                                 },
                                 onError: (err) => {
                                     console.log(err)
@@ -395,49 +441,37 @@ export default function WorkflowStatus({account, owner}) {
                         }
                     />
                 </div>
-                <div>
-                    {'1' === workflowStatus.toString() ? (
-                        <Proposals/>
-                    ) : ('')}
-                    {'3' === workflowStatus.toString() ? (
-                        <ChooseVote/>
-                    ) : ('')}
-                    {'3' === workflowStatus.toString() ? (
-                        <GetProposal/>
-                    ) : ('')}
-                </div>
-
-                <div>
-                    {'' !== winningProposalId ? (
-                        <Modal
-                            okText="ok"
-                            hasCancel={false}
-                            onCloseButtonPressed={resetWinningProposalId}
-                            onOk={resetWinningProposalId}
-                            title='Résultat de tirage'
+            </div>
+            <div>
+                {'' !== winningProposalId ? (
+                    <Modal
+                        okText="ok"
+                        hasCancel={false}
+                        onCloseButtonPressed={resetWinningProposalId}
+                        onOk={resetWinningProposalId}
+                        title='Résultat de tirage'
+                    >
+                        <p
+                            style={{
+                                fontWeight: 600,
+                                marginRight: '1em',
+                                textAlign: 'center'
+                            }}
                         >
-                            <p
-                                style={{
-                                    fontWeight: 600,
-                                    marginRight: '1em',
-                                    textAlign: 'center'
-                                }}
-                            >
-                                {`La proposition gagnante est celle ayant l'id numéro : ${winningProposalId}`}
-                            </p>
-                            <p
-                                style={{
-                                    fontWeight: 600,
-                                    marginRight: '1em',
-                                    textAlign: 'center'
-                                }}
-                            >
-                                Merci de votre participation !
-                            </p>
-                        </Modal>
-                    ) : ('')
-                    }
-                </div>
+                            {`La proposition gagnante est celle ayant l'id numéro : ${winningProposalId}`}
+                        </p>
+                        <p
+                            style={{
+                                fontWeight: 600,
+                                marginRight: '1em',
+                                textAlign: 'center'
+                            }}
+                        >
+                            Merci de votre participation !
+                        </p>
+                    </Modal>
+                ) : ('')
+                }
             </div>
         </div>
     );

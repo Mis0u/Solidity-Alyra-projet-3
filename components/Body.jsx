@@ -5,18 +5,20 @@ import WorkflowStatus from "./WorkflowStatus";
 import {ConnectButton} from "web3uikit";
 import {owner} from "./utils/ContractOwner";
 
-export default function Header() {
-    const { enableWeb3, account, isWeb3EnableLoading, isWeb3Enabled, Moralis } = useMoralis();
+export default function Body() {
+    const { account } = useMoralis();
 
     return (
-        <div className='h-screen'>
-            <div className="flex justify-end mt-2 mb-4">
+        <div className='h-screen flex flex-col items-center	 justify-center'>
+            <div className={account ? (
+                "flex justify-center items-center mb-4"
+            ) : ('flex justify-center items-center h-screen')}>
                 <ConnectButton />
             </div>
             { account  ? (
                 <div className='flex flex-col mt-5'>
                     <AddVoter/>
-                    <div className='flex flex-row'>
+                    <div className='flex flex-col items-center justify-center'>
                         <GetVoter />
                         <WorkflowStatus account={account} owner={owner}/>
                     </div>

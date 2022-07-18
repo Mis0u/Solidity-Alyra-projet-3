@@ -2,11 +2,9 @@ import {Button, Input, useNotification} from "web3uikit";
 import {useState} from "react";
 import {useWeb3Contract} from "react-moralis";
 import {contractAddress} from "./utils/ContractAddress";
-// import { handleSuccess, handleError } from "./utils/NotificationWeb3";
 
 export default function AddProposals() {
     const [proposal, setProposal] = useState('')
-    const [proposalId, setProposalId] = useState('')
 
     const dispatch = useNotification();
 
@@ -71,10 +69,9 @@ export default function AddProposals() {
     })
 
     return (
-        <div>
-            <div className="add-proposal">
+        <div className='flex w-full'>
+            <div className="add-proposal flex justify-between w-full">
                 <Input
-                    id='getVoter'
                     onChange={handleChange}
                     iconPosition="front"
                     label="Insérez votre proposition"
@@ -83,22 +80,25 @@ export default function AddProposals() {
                     type="text"
                 />
 
-                <Button
-                    text='Ajouter la proposition'
-                    theme='primary'
-                    type='button'
-                    icon='triangleUp'
-                    onClick={async () =>
-                        await proposalChoosen({
-                            onSuccess: (msg) => {
-                                handleSuccess(msg, 'Votre proposition a bien été  soumise', 'Information', 'check')
-                            },
-                            onError: (err) => {
-                                handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
-                            }
-                        })
-                    }
-                />
+                <div className="bnt-add-proposal">
+                    <Button
+                        text='Ajouter la proposition'
+                        theme='primary'
+                        type='button'
+                        icon='arrowCircleLeft'
+                        size='large'
+                        onClick={async () =>
+                            await proposalChoosen({
+                                onSuccess: (msg) => {
+                                    handleSuccess(msg, 'Votre proposition a bien été  soumise', 'Information', 'check')
+                                },
+                                onError: (err) => {
+                                    handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
+                                }
+                            })
+                        }
+                    />
+                </div>
             </div>
         </div>
     )
