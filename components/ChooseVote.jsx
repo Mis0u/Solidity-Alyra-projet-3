@@ -51,9 +51,9 @@ export default function ChooseVote() {
             {
                 "inputs": [
                     {
-                        "internalType": "uint256",
+                        "internalType": "uint128",
                         "name": "_id",
-                        "type": "uint256"
+                        "type": "uint128"
                     }
                 ],
                 "name": "setVote",

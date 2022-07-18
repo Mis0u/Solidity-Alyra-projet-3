@@ -48,18 +48,21 @@ export default function AddProposals() {
     const {
         runContractFunction: proposalChoosen,
     } = useWeb3Contract({
-        abi: abi,
-        contractAddress: contractAddress,
-        functionName: "addProposal",
-        params: {
-            _desc: proposal,
-        }
-    })
-
-    const {
-        runContractFunction: proposalInfoId,
-    } = useWeb3Contract({
-        abi: abi,
+        abi: [
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "_desc",
+                        "type": "string"
+                    }
+                ],
+                "name": "addProposal",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+        ],
         contractAddress: contractAddress,
         functionName: "addProposal",
         params: {
@@ -92,7 +95,6 @@ export default function AddProposals() {
                             },
                             onError: (err) => {
                                 handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
-                                console.log(err)
                             }
                         })
                     }

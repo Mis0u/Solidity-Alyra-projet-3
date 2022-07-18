@@ -2,13 +2,12 @@ import {useMoralis, useWeb3Contract } from "react-moralis";
 import { Button, Input, Table, useNotification} from 'web3uikit';
 import {useEffect, useState} from "react";
 import {contractAddress} from "./utils/ContractAddress";
+import {owner} from "./utils/ContractOwner";
 
 export default function AddVoter() {
     const [address, setAddress] = useState('');
     const [arrayAddress, setArrayAddress] = useState([]);
-    const { account, enableWeb3, isWeb3Enabled } = useMoralis();
-
-    const owner = '0x3e7729aBcE92aA0d91C7aF994ebb2461d2ea2dF2';
+    const { account } = useMoralis();
 
     const dispatch = useNotification();
 
@@ -49,9 +48,6 @@ export default function AddVoter() {
 
     const {
         runContractFunction: voting,
-        data: enterTxResponse,
-        isLoading,
-        isFetching,
     } = useWeb3Contract({
         abi: [
             {
@@ -82,54 +78,62 @@ export default function AddVoter() {
 
     return (
         <div>
-
-            {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
-                <Input
-                    id='addVoter'
-                    onChange={handleChange}
-                    iconPosition="front"
-                    label="Insérez une adresse"
-                    name="Test text Input"
-                    prefixIcon="eth"
-                    type="text"
-                />
-            ): ('')}
-            { account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
-                <Button
-                    text='Ajouter le voter'
-                    theme='primary'
-                    type='button'
-                    icon='arrowCircleDown'
-                    onClick={async () =>
-                        await voting({
-                            onSuccess: (mess) => {
-                                setArrayAddress((prevArray) =>[...prevArray, address])
-                                handleSuccess(mess, 'info', `L\'adresse ${address} a bien été ajouté`, 'Ajout d\'une nouvelle adresse', 'bell')
-                            },
-                            onError: (err) => {
-                                handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
+            <div className="flex flex-row justify-center m-2">
+                <div className="input-add-voter mr-2">
+                    {account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
+                        <Input
+                            id='addVoter'
+                            onChange={handleChange}
+                            iconPosition="front"
+                            label="Insérez une adresse"
+                            name="Test text Input"
+                            prefixIcon="eth"
+                            type="text"
+                        />
+                    ): ('')}
+                </div>
+                <div className="btn-add-voter ml-2">
+                    { account.toLocaleLowerCase() === owner.toLocaleLowerCase() ? (
+                        <Button
+                            text='Ajouter le voter'
+                            theme='primary'
+                            type='button'
+                            size='large'
+                            icon='arrowCircleDown'
+                            onClick={async () =>
+                                await voting({
+                                    onSuccess: (mess) => {
+                                        setArrayAddress((prevArray) =>[...prevArray, address])
+                                        handleSuccess(mess, 'info', `L\'adresse ${address} a bien été ajouté`, 'Ajout d\'une nouvelle adresse', 'bell')
+                                    },
+                                    onError: (err) => {
+                                        handleError(err, `${err.error ? err.error.message : err}`, 'Erreur', 'xCircle')
+                                    }
+                                })
                             }
-                        })
-                    }
-                />
-            ) : ('') }
-            <Table
-                columnsConfig="80px 3fr 2fr 2fr 80px"
-                data={
-                    arrayAddress.map((value) => (
-                        [
-                            value
-                        ]
-                    ))
+                        />
+                    ) : ('') }
+                </div>
+            </div>
+            <div className="table mt-5 mb-5 w-full">
+                <Table
+                    columnsConfig="80px 3fr 2fr 2fr 80px"
+                    data={
+                        arrayAddress.map((value) => (
+                            [
+                                value
+                            ]
+                        ))
 
-                }
-                header={['Adresse Enregistrée']}
-                isColumnSortable={[
-                    false,
-                ]}
-                noPagination
-                pageSize={30}
-            />
+                    }
+                    header={['Adresse Enregistrée']}
+                    isColumnSortable={[
+                        false,
+                    ]}
+                    noPagination
+                    pageSize={30}
+                />
+            </div>
         </div>
     );
 }
