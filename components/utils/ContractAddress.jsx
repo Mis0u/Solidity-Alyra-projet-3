@@ -1,1 +1,1 @@
-export const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+export const contractAddress = '0xd153C296Ada00c867a11eBAA1Dc66cF7c7Df52a0';
